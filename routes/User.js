@@ -5,7 +5,7 @@ const passportConfig = require('../passport');
 const JWT = require('jsonwebtoken');
 const User = require('../models/User');
 const Todo = require('../models/Todo');
-
+const Cert = require('../models/Cert');
 
 const signToken = userID =>{
     return JWT.sign({
@@ -47,29 +47,29 @@ userRouter.get('/logout',passport.authenticate('jwt',{session : false}),(req,res
     res.json({user:{username : "", role : ""},success : true});
 });
 
-userRouter.post('/todo',passport.authenticate('jwt',{session : false}),(req,res)=>{
-    const todo = new Todo(req.body);
-    todo.save(err=>{
+userRouter.post('/cert',passport.authenticate('jwt',{session : false}),(req,res)=>{
+    const cert = new Cert(req.body);
+    cert.save(err=>{
         if(err)
             res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
         else{
-            req.user.todos.push(todo);
+            req.user.cert.push(cert);
             req.user.save(err=>{
                 if(err)
                     res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
                 else
-                    res.status(200).json({message : {msgBody : "Successfully created todo", msgError : false}});
+                    res.status(200).json({message : {msgBody : "The hash have been saved", msgError : false}});
             });
         }
     })
 });
 
-userRouter.get('/todos',passport.authenticate('jwt',{session : false}),(req,res)=>{
-    User.findById({_id : req.user._id}).populate('todos').exec((err,document)=>{
+userRouter.get('/cert',passport.authenticate('jwt',{session : false}),(req,res)=>{
+    User.findById({_id : req.user._id}).populate('cert').exec((err,document)=>{
         if(err)
             res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
         else{
-            res.status(200).json({todos : document.todos, authenticated : true});
+            res.status(200).json({cert : document.cert, authenticated : true});
         }
     });
 });

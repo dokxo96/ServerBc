@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
-const CertSchema = new mongoose.Schema({{
-
-    cert :{
-        type :String,
-        require=true
-    },
-    certhash:{
-        type: String,
-        require=true
+const CertSchema = new mongoose.Schema({
+    hash : {
+        type : String,
+        required : true
     }
 });
 
