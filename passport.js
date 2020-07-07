@@ -27,8 +27,8 @@ passport.use(new JwtStrategy({
 }));
 
 // authenticated local strategy using username and password
-passport.use(new LocalStrategy((usuario,contraseña,done)=>{
-    User.findOne({usuario},(err,user)=>{
+passport.use(new LocalStrategy((username,password,done)=>{
+    User.findOne({username},(err,user)=>{
         // something went wrong with database
         if(err)
             return done(err);
@@ -36,7 +36,7 @@ passport.use(new LocalStrategy((usuario,contraseña,done)=>{
         if(!user)
             return done(null,false);
         // check if password is correct
-        user.comparePassword(contraseña,done);
+        user.comparePassword(password,done);
         
     });
 }));

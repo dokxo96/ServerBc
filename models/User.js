@@ -2,79 +2,49 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
-    nombres :{
+    firstname :{
         type : String,
         required : true,
         min : 1,
         max : 50
     },
-    apellidos :{
+    lastname :{
         type : String,
         required : true,
         min : 1,
         max : 50
     },
-    telefono :{
-        type : Number,
-       
-
-    },
-    institucion :{
-        type : String,
-        
-        min : 1,
-        max : 50
-    },
-    carrera :{
-        type : String,
-        
-        min : 1,
-        max : 50
-    },
-    fecha_nac :{
-        type : String,
-        
-    },
-    fecha_egr:{
-        type : String,
-       
-    },
-    usuario :{
+    username :{
         type : String,
         required : true,
-        min : 1,
-        max : 50
+        min : 6,
+        max : 15
     },
-    contraseña : {
+    password : {
         type : String,
         required : true
     },
     role : {
         type : String,
         enum : ['user','admin'],
-       
+        required: true
     },
-    hash : {
-        type : String,
-        
-    },
-    
-    cert : [{type : mongoose.Schema.Types.ObjectId, ref: 'Cert'}]
+    todos : [{type : mongoose.Schema.Types.ObjectId, ref: 'Todo'}]
 });
 
 UserSchema.pre('save',function(next){
-    if(!this.isModified('contraseña'))
+    if(!this.isModified('password'))
         return next();
-    bcrypt.hash(this.contraseña,10,(err,passwordHash)=>{
+    bcrypt.hash(this.password,10,(err,passwordHash)=>{
         if(err)
             return next(err);
-        this.contraseña = passwordHash;
+        this.password = passwordHash;
         next();
     });
 });
 
-UserSchema.methods.comparePassword = function(contraseña,cb){
-    bcrypt.compare(contraseña,this.contraseña,(err,isMatch)=>{
+UserSchema.methods.comparePassword = function(password,cb){
+    bcrypt.compare(password,this.password,(err,isMatch)=>{
         if(err)
             return cb(err);
         else{
