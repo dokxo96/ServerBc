@@ -24,10 +24,25 @@ const UserSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    phone : {
+        type : String,
+       
+    },
+    department :{
+        type : String,
+        min : 1,
+        max : 50
+    },
+    job :{
+        type : String,
+       
+        min : 1,
+        max : 50
+    },
     role : {
         type : String,
-        enum : ['user','admin'],
-        required: true
+        enum : ['user','admin','SU'],
+        
     },
     cert : [{type : mongoose.Schema.Types.ObjectId, ref: 'Cert'}]
 });
