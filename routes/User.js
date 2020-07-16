@@ -75,10 +75,30 @@ userRouter.route('/studentsd').get((req, res) => {
       return next("Read students route:\n",error)
     } else {
       res
-      console.log(req)
     }
   })
 })
+
+userRouter.route('/ded').get((req, res) => {
+    User.find({role:"user"},(error, data) => {
+      if (error) {
+        return next(error)
+      } else {
+        res.json(data)
+      }
+    })
+  });
+  userRouter.route('/delete-student/:id').delete((req, res, next) => {
+    User.findByIdAndRemove(req.params.id, (error, data) => {
+      if (error) {
+        return next(error);
+      } else {
+        res.status(200).json({
+          msg: data
+        })
+      }
+    })
+  })
 userRouter.post('/login',passport.authenticate('local',{session : false}),(req,res)=>{
     if(req.isAuthenticated()){
        const {_id,username,role} = req.user;
