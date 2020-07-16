@@ -69,17 +69,8 @@ userRouter.post('/certregister',(req,res)=>{
     });
 });
 // READ Students
-userRouter.route('/studentsd').get((req, res) => {
-  User.find((error, data) => {
-    if (error) {
-      return next("Read students route:\n",error)
-    } else {
-      res
-    }
-  })
-})
 
-userRouter.route('/ded').get((req, res) => {
+userRouter.route('/get-student').get((req, res) => {
     User.find({role:"user"},(error, data) => {
       if (error) {
         return next(error)
@@ -88,6 +79,7 @@ userRouter.route('/ded').get((req, res) => {
       }
     })
   });
+  //delete student
   userRouter.route('/delete-student/:id').delete((req, res, next) => {
     User.findByIdAndRemove(req.params.id, (error, data) => {
       if (error) {
@@ -96,6 +88,20 @@ userRouter.route('/ded').get((req, res) => {
         res.status(200).json({
           msg: data
         })
+      }
+    })
+  });
+  //get student by id
+  userRouter.route('/update-student/:id').put((req, res, next) => {
+    User.findByIdAndUpdate(req.params.id, {
+      $set: req.body
+    }, (error, data) => {
+      if (error) {
+        return next(error);
+        console.log(error)
+      } else {
+        res.json(data)
+        console.log('Student updated successfully !')
       }
     })
   })
