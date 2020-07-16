@@ -39,12 +39,29 @@ const UserSchema = new mongoose.Schema({
         min : 1,
         max : 50
     },
+    institution :{
+        type : String,
+        min : 1,
+        max : 50
+    },
+    carrer :{
+        type : String,
+       
+        min : 1,
+        max : 50
+    },
+    finish :{
+        type : String,
+       
+        min : 1,
+        max : 50
+    },
     role : {
         type : String,
         enum : ['user','admin','SU'],
         
     },
-    cert : [{type : mongoose.Schema.Types.ObjectId, ref: 'Cert'}]
+    cert : [{type : mongoose.Schema.Types.ObjectId, ref: 'Todo'}]
 });
 
 UserSchema.pre('save',function(next){

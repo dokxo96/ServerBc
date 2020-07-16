@@ -68,7 +68,17 @@ userRouter.post('/certregister',(req,res)=>{
         }
     });
 });
-
+// READ Students
+userRouter.route('/studentsd').get((req, res) => {
+  User.find((error, data) => {
+    if (error) {
+      return next("Read students route:\n",error)
+    } else {
+      res
+      console.log(req)
+    }
+  })
+})
 userRouter.post('/login',passport.authenticate('local',{session : false}),(req,res)=>{
     if(req.isAuthenticated()){
        const {_id,username,role} = req.user;
@@ -77,7 +87,6 @@ userRouter.post('/login',passport.authenticate('local',{session : false}),(req,r
        res.status(200).json({isAuthenticated : true,user : {username,role}});
     }
 });
-
 userRouter.get('/logout',passport.authenticate('jwt',{session : false}),(req,res)=>{
     res.clearCookie('access_token');
     res.json({user:{username : "", role : ""},success : true});
@@ -106,6 +115,18 @@ userRouter.get('/cert',passport.authenticate('jwt',{session : false}),(req,res)=
             res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
         else{
             res.status(200).json({cert : document.cert, authenticated : true});
+        }
+    });
+});
+
+userRouter.get('/students',passport.authenticate('jwt',{session : false}),(req,res)=>{
+    User.find({role:"user"}).exec((err,document)=>{
+        if(err)
+        return next(error)
+         //   res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
+        else{
+            res.json(document)
+            //res.status(200).json(document);
         }
     });
 });
