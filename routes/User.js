@@ -79,6 +79,15 @@ userRouter.route('/get-student').get((req, res) => {
       }
     })
   });
+  userRouter.route('/get-student/:id').get((req, res) => {
+    User.findById(req.params.id,(error, data) => {
+      if (error) {
+        return next(error)
+      } else {
+        res.json(data)
+      }
+    })
+  });
   //delete student
   userRouter.route('/delete-student/:id').delete((req, res, next) => {
     User.findByIdAndRemove(req.params.id, (error, data) => {
@@ -92,6 +101,17 @@ userRouter.route('/get-student').get((req, res) => {
     })
   });
   //get student by id
+  userRouter.route('/edit-student/:id').get((req, res) => {
+    User.findById(req.params.id, (error, data) => {
+      if (error) {
+        return next(error)
+      } else {
+        res.json(data)
+      }
+    })
+  })
+  
+  //update an student by id
   userRouter.route('/update-student/:id').put((req, res, next) => {
     User.findByIdAndUpdate(req.params.id, {
       $set: req.body
@@ -100,7 +120,8 @@ userRouter.route('/get-student').get((req, res) => {
         return next(error);
         console.log(error)
       } else {
-        res.json(data)
+       // res.json(data)
+        res.json({message : {msgBody : "Student updated successfully !", msgError : false}});
         console.log('Student updated successfully !')
       }
     })
