@@ -51,14 +51,14 @@ userRouter.post('/registerAdmins',(req,res)=>{
     });
 });
 userRouter.post('/certregister',(req,res)=>{
-    const { firstname,lastname,username,password,phone,department,job,role } = req.body;
+    const { firstname,lastname,username,password,phone,institution,carrer,finish,role } = req.body;
     User.findOne({username},(err,user)=>{
         if(err)
             res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
         if(user)
             res.status(400).json({message : {msgBody : "Username is already taken", msgError: true}});
         else{
-            const newUser = new User({ firstname,lastname,username,password,phone,department,job,role });
+            const newUser = new User({firstname,lastname,username,password,phone,institution,carrer,finish,role  });
             newUser.save(err=>{
                 if(err)
                     res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
