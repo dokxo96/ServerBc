@@ -61,7 +61,7 @@ const UserSchema = new mongoose.Schema({
         enum : ['user','admin','SU'],
         
     },
-    cert : [{type : mongoose.Schema.Types.ObjectId, ref: 'Todo'}]
+    cert : [{type : mongoose.Schema.Types.ObjectId, ref: 'Cert'}]
 });
 
 UserSchema.pre('save',function(next){
