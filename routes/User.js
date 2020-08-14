@@ -157,10 +157,11 @@ userRouter.post('/cert/:id',passport.authenticate('jwt',{session : false}),(req,
               } else {
                 data.cert.push(cert);
                 data.save(err=>{
-                if(err){}
-                //  res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
-                else{console.log("dfgfg")}
-                 //   res.status(200).json({message : {msgBody : "The hash have been saved", msgError : false}});
+                if(err)
+                  res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
+                else
+                console.log("inserted")
+                   res.status(200).json({message : {msgBody : "The hash have been saved", msgError : false}});
             });
                 //res.json(data)
               
