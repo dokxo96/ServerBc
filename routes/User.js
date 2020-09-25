@@ -7,6 +7,8 @@ const User = require('../models/User');
 const Todo = require('../models/Todo');
 const Cert = require('../models/Cert');
 const CertPendiente = require('../models/CertPendiente');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
 
 const signToken = userID =>{
     return JWT.sign({
@@ -259,5 +261,28 @@ userRouter.get('/get-solCert',passport.authenticate('jwt',{session : false}),(re
     });
 });
 
+///API Stampíng.io
+
+
+
+userRouter.post('/AddStampingIo', async(req, res)=>{
+
+  var TokenAcceso ="MTYwMDk5Mjc5OTkxOTpmNWQxNzExY2IwNGQ3ZTE4YjRjZjkxYzQyMmEwOA==";
+  const { hash } = req.body;
+  var datosPOST='evidence='+hash;
+  console.log(datosPOST)
+ var request = new XMLHttpRequest();
+
+await request.open("POST", "https://api.stamping.io/stamp/?"+datosPOST);
+request.setRequestHeader("Authorization", "Basic " + TokenAcceso);
+  request.onreadystatechange = function () {
+    if (this.readyState === 4) {
+       resp = JSON.parse(this.responseText)
+       console.log(resp)
+     } 
+  } 
+request.send()
+ 
+});
 
 module.exports = userRouter;
