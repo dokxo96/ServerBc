@@ -9,6 +9,10 @@ const CertSchema = new mongoose.Schema({
         type : String,
         required : true
     }
+    ,hashIpfs : {
+        type : String,
+        required : true
+    }
 });
 
 module.exports = mongoose.model('Cert',CertSchema);

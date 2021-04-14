@@ -54,14 +54,14 @@ userRouter.post('/registerAdmins',(req,res)=>{
 });
 //insertar un usuario 
 userRouter.post('/certregister',(req,res)=>{
-    const { firstname,lastname,username,password,phone,institution,carrer,finish,role } = req.body;
+    const { firstname,lastname,username,password,phone,address,institution,carrer,finish,role } = req.body;
     User.findOne({username},(err,user)=>{
         if(err)
             res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
         if(user)
             res.status(400).json({message : {msgBody : "Username is already taken", msgError: true}});
         else{
-            const newUser = new User({firstname,lastname,username,password,phone,institution,carrer,finish,role  });
+            const newUser = new User({firstname,lastname,username,password,phone,address,institution,carrer,finish,role  });
             newUser.save(err=>{
                 if(err)
                     res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
@@ -144,40 +144,56 @@ userRouter.get('/logout',passport.authenticate('jwt',{session : false}),(req,res
     res.json({user:{username : "", role : ""},success : true});
 });
 
-userRouter.post('/cert/:id',passport.authenticate('jwt',{session : false}),(req,res)=>{
+//RUtas Certificaods
+
+
+userRouter.route('/getcert/:hash').get((req, res) => {
+   console.log(req.params.hash)
+  Cert.findOne({hash:req.params.hash},(error, data) => {
+    if(error)
+          return res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
+      if(data)
+      { console.log("Yaexiste"+data);
+          return res.status(400).json({message : {msgBody : "Hash is already Regiter", msgError: true}});
+  }
+  if(!data)
+  { console.log("No existe"+data);
+      res.status(200).json({message : {msgBody : "Hash is new", msgError: true}});
+    
+ } 
+  })
+});
+
+
+
+
+
+
+
+
+
+userRouter.post('/cert/',passport.authenticate('jwt',{session : false}),(req,res)=>{
     const cert = new Cert(req.body);
-    cert.save(err=>{
-        if(err)
-            res.status(500).json({message : {msgBody : "Error has occured1", msgError: true}});
-        else{
-        
-            User.findById(req.params.id, (error, data) => {
-              if (error) {
-                return next(error)
-              } else {
-                data.cert.push(cert);
-                data.save(err=>{
-                if(err)
-                  res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
-                else
-                console.log("inserted")
-                   res.status(200).json({message : {msgBody : "The hash have been saved", msgError : false}});
-            });
-                //res.json(data)
+    const {hash}= req.body;
+    console.log( cert);
+    
+
+
+
+    
+          cert.save(err=>{
+            if(err)
+                res.status(500).json({message : {msgBody : "Error has occured1", msgError: true}});
+            else{
+            
+              console.log("inserted")
+              res.status(200).json({message : {msgBody : "The hash have been saved", msgError : false}});
               
-              }
-            })
-          
-           // console.log(req.user,req.params.id)
-            //req.user.cert.push(cert);
-            //req.user.save(err=>{
-             //   if(err)
-              //      res.status(500).json({message : {msgBody : "Error has occured", msgError: true}});
-              //  else
-              //7/      res.status(200).json({message : {msgBody : "The hash have been saved", msgError : false}});
-            //});
-        }
-    })
+               
+            }
+        }) 
+     
+  
 });
  userRouter.route('/update-student/:id').put((req, res, next) => {
     User.findByIdAndUpdate(req.params.id, {
@@ -203,6 +219,18 @@ userRouter.get('/cert',passport.authenticate('jwt',{session : false}),(req,res)=
     });
 });
 
+userRouter.get('/GetAllCerts',passport.authenticate('jwt',{session : false}),(req,res)=>{
+  Cert.find()
+  .then((Certs) => res.json(Certs))
+  .catch((err) => res.status(400).json("Error:" + err));
+  
+});
+userRouter.get('/finCerExist',passport.authenticate('jwt',{session : false}),(req,res)=>{
+  Cert.find()
+  .then((Certs) => res.json(Certs))
+  .catch((err) => res.status(400).json("Error:" + err));
+  
+});
 userRouter.get('/students',passport.authenticate('jwt',{session : false}),(req,res)=>{
     User.find({role:"user"}).exec((err,document)=>{
         if(err)

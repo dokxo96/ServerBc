@@ -28,6 +28,13 @@ const UserSchema = new mongoose.Schema({
         type : String,
        
     },
+    address : {
+        type : String,
+        required : true,
+        min : 1,
+        max : 50
+        
+    },
     department :{
         type : String,
         min : 1,

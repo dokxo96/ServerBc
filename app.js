@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+var cors = require('cors');
+
 app.use(cookieParser());
 app.use(express.json());
 
@@ -34,7 +36,7 @@ const username="SUser";
         }
     });
 
-
+app.use(cors());
 const userRouter = require('./routes/User');
 app.use('/user',userRouter);
 
